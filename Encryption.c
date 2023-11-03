@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #define MAX 20
+/**
+ * when it prompts for a text file, put test.txt
+ */
 
 int main()
 {
