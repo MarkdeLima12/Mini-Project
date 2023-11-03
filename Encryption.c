@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#define MAX 20
+#define MAX 120
 /**
  * when it prompts for a text file, put test.txt
  */
@@ -15,9 +15,21 @@ int main()
     scanf("%s", fileName);
 
     ptr = fopen(fileName, "r");
-    fgets(printString, MAX, ptr);
 
-    printf("%s", printString);
+    do
+    {
+        fgets(printString, MAX, ptr);
+
+        printf("%s", printString);
+
+        if (0)
+        {
+
+            break;
+        }
+
+    } while (1);
+
     /**
      * ***** Has two command line switches *****
      *
