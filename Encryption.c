@@ -1,7 +1,20 @@
 #include <stdio.h>
+#include <string.h>
+#define MAX 20
 
 int main()
 {
+    char fileName[] = "";
+    char printString[] = "";
+    FILE *ptr;
+
+    printf("Please enter the file: ");
+    scanf("%s", fileName);
+
+    ptr = fopen(fileName, "r");
+    fgets(printString, MAX, ptr);
+
+    printf("%s", printString);
     /**
      * ***** Has two command line switches *****
      *
