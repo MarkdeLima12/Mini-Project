@@ -1,47 +1,66 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #define MAX 120
 
-int main()
+int main(char *argC[], char name[])
 {
-    char fileName[] = "test.txt";
+    const char fileNametxt[] = name;
+    const char fileNamecrp[] = name;
+    char switchCheck = argC[1];
     char printString[MAX] = "";
     FILE *ptr, *write, *append;
-    char hexEncrypt[MAX * 2] = "";
     int outChar;
 
-    ptr = fopen("test.txt", "r+");
-    append = fopen("test.crp", "a");
-    write = fopen("test.crp", "w");
-
-    do
+    strncat(fileNametxt, ".txt", 4);
+    strncat(fileNamecrp, ".crp", 4);
+    switch (switchCheck)
     {
-        fgets(printString, MAX, ptr);
-        printf("%s\n", printString);
-        printf("%d\n", strlen(printString));
-        for (int i = 0; strlen(printString) > i; i++)
+    case ' ':
+    case 'e':
+    case 'E':
+    {
+        ptr = fopen(fileNametxt, "r");
+        append = fopen(fileNamecrp, "a");
+        printf("%s", fileNamecrp);
+
+        do
         {
-            if (printString[i] == '\n')
+            fgets(printString, MAX, ptr);
+            printf("%s\n", printString);
+            printf("%d\n", strlen(printString));
+            for (int i = 0; strlen(printString) > i; i++)
             {
-                fprintf(append, "%c", '\n');
-            }
-            else if (printString[i] == '\t')
-            {
-                fprintf(append, "%s", "TT");
-            }
-            else
-            {
-                printf("%c, %d\n", printString[i], printString[i]);
-                outChar = (int)printString[i] - 16;
-                if (outChar < 32)
+                if (printString[i] == '\n')
                 {
-                    outChar = (outChar - 32) + 144;
+                    fprintf(append, "%c", '\n');
                 }
-                // printf("This is outChar: %d\n", outChar);
-                fprintf(append, "%X", outChar);
+                else if (printString[i] == '\t')
+                {
+                    fprintf(append, "%s", "TT");
+                }
+                else
+                {
+                    outChar = (int)printString[i] - 16;
+                    if (outChar < 32)
+                    {
+                        outChar = (outChar - 32) + 144;
+                    }
+                    // printf("This is outChar: %d\n", outChar);
+                    fprintf(append, "%X", outChar);
+                }
             }
-        }
-        printf("This is hexEncrypt: %s\n", hexEncrypt);
-        printf("%s\n", printString);
-    } while (!feof(ptr));
+            printf("%s\n", printString);
+        } while (!feof(ptr));
+        remove(fileNametxt);
+        break;
+    }
+    case 'd':
+    case 'D':
+        break;
+
+    default:
+        printf("This is invalid input.");
+        return 0;
+    }
 }
