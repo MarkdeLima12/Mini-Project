@@ -7,28 +7,36 @@
 
 int main()
 {
-    char fileName[] = "";
-    char printString[] = "";
-    FILE *ptr;
+    char fileName[] = "test.txt";
+    char printString[MAX] = "";
+    FILE *ptr, *write;
+    char lineChar[] = "";
+    char hexEncrypt[] = "";
+    int encryptCalc;
 
-    printf("Please enter the file: ");
-    scanf("%s", fileName);
+    // printf("Please enter the file: ");
+    // scanf("%s", fileName);
 
-    ptr = fopen(fileName, "r");
+    ptr = fopen("test.txt", "r");
+    // write = fopen("test.txt", "w");
 
     do
     {
         fgets(printString, MAX, ptr);
-
-        printf("%s", printString);
-
-        if (0)
+        printf("%s\n", printString);
+        printf("%d", strlen(printString));
+        for (int i = 0; (strlen(printString) - 1) > i; i++)
         {
-
-            break;
+            lineChar[i] = printString[i];
+            encryptCalc = (int)printString[i];
         }
 
-    } while (1);
+        printf("%s", lineChar);
+    } while (!feof(ptr));
+
+    // writes to the file
+    // fprintf(write, "Does this work??");
+    // printf("%s", printString);
 
     /**
      * ***** Has two command line switches *****
@@ -46,5 +54,5 @@ int main()
      *
      */
 
-    //hello mark
+    // hello mark
 }
