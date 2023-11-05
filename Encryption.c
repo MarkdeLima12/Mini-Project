@@ -1,23 +1,20 @@
 #include <stdio.h>
 #include <string.h>
 #define MAX 120
-/**
- * when it prompts for a text file, put test.txt
- */
 
 int main()
 {
     char fileName[] = "test.txt";
     char printString[MAX] = "";
-    FILE *ptr, *write;
+    FILE *ptr, *write, *append;
     char hexEncrypt[MAX * 2] = "";
     int outChar;
 
     // printf("Please enter the file: ");
     // scanf("%s", fileName);
 
-    ptr = fopen("test.txt", "r");
-    // write = fopen("test.txt", "w");
+    ptr = fopen("test.txt", "r+");
+    append = fopen("test.txt", "a");
 
     do
     {
@@ -36,6 +33,7 @@ int main()
             }
             else
             {
+                printf("%c, %d\n", printString[i], printString[i]);
                 outChar = (int)printString[i] - 16;
                 if (outChar < 32)
                 {
@@ -43,13 +41,14 @@ int main()
                 }
                 printf("This is outChar: %d\n", outChar);
             }
-            strcat(hexEncrypt, (char)outChar);
+            fprintf(append, "%x ", outChar);
         }
         printf("This is hexEncrypt: %s\n", hexEncrypt);
         printf("%s\n", printString);
     } while (!feof(ptr));
 
     // writes to the file
+    // write = fopen("test.txt", "w");
     // fprintf(write, "Does this work??");
     // printf("%s", printString);
 
