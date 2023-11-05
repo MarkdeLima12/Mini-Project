@@ -1,1 +1,0 @@
-printf("This is outChar: %d\n", outChar);
