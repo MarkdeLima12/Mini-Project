@@ -10,9 +10,8 @@ int main()
     char fileName[] = "test.txt";
     char printString[MAX] = "";
     FILE *ptr, *write;
-    char lineChar[] = "";
-    char hexEncrypt[] = "";
-    int encryptCalc;
+    char hexEncrypt[MAX * 2] = "";
+    int outChar;
 
     // printf("Please enter the file: ");
     // scanf("%s", fileName);
@@ -24,14 +23,30 @@ int main()
     {
         fgets(printString, MAX, ptr);
         printf("%s\n", printString);
-        printf("%d", strlen(printString));
+        printf("%d\n", strlen(printString));
         for (int i = 0; (strlen(printString) - 1) > i; i++)
         {
-            lineChar[i] = printString[i];
-            encryptCalc = (int)printString[i];
+            if (printString[i] == '\n')
+            {
+                printf("We have to put code here for a return carage.\n");
+            }
+            else if (printString[i] == '\t')
+            {
+                printf("We have to put here for a tab.\n");
+            }
+            else
+            {
+                outChar = (int)printString[i] - 16;
+                if (outChar < 32)
+                {
+                    outChar = (outChar - 32) + 144;
+                }
+                printf("This is outChar: %d\n", outChar);
+            }
+            strcat(hexEncrypt, (char)outChar);
         }
-
-        printf("%s", lineChar);
+        printf("This is hexEncrypt: %s\n", hexEncrypt);
+        printf("%s\n", printString);
     } while (!feof(ptr));
 
     // writes to the file
@@ -41,7 +56,6 @@ int main()
     /**
      * ***** Has two command line switches *****
      *
-     * ***** takes a file (type .txt) and reads the text *****
      *
      * ***** Uses text file and encrypts the characters by converting *****
      * ***** them to an integer (ASCII), subtracting 16, then converting to hex *****
