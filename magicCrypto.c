@@ -3,28 +3,23 @@
 #include <unistd.h>
 #define MAX 120
 
-int main(int argC[], char argV[])
+int main(int argC, char *argV[])
 {
-    char fileNametxt[] = argV[2];
-    char fileNameCrp[] = argV[2];
-    char switchCheck = argV[1];
+    char *nametxt = "encrypt_this2.txt";
+    char *nameCrp = "encrypt_this2.crp";
+    char *switchValue = argV[1];
+
     char printString[MAX] = "";
     char charats[MAX * 2] = "";
     FILE *ptr, *write, *append;
     int outChar;
-    printf("%s", argv[2]);
 
-    strncat(fileNametxt, ".txt", 5);
-    strncat(fileNameCrp, ".crp", 5);
-    switch (switchCheck)
+    printf("%s", switchValue);
+    if (strcmp(switchValue, "-E") == 0)
     {
-    case ' ':
-    case 'e':
-    case 'E':
-    {
-        ptr = fopen(fileNametxt, "r");
-        append = fopen(fileNameCrp, "a");
-        printf("%s", fileNameCrp);
+        ptr = fopen(nametxt, "r");
+        append = fopen(nameCrp, "a");
+        printf("%s", nametxt);
 
         do
         {
@@ -54,29 +49,22 @@ int main(int argC[], char argV[])
             }
             printf("%s\n", printString);
         } while (!feof(ptr));
-        remove(fileNametxt);
-        break;
     }
-    case 'd':
-    case 'D':
+    else if (strcmp(switchValue, "-D") == 0)
     {
-        ptr = fopen(fileNameCrp, "r");
-        append = fopen(fileNametxt, "a");
+        ptr = fopen(nameCrp, "r");
+        append = fopen(nametxt, "a");
         if (ptr == NULL)
         {
-            printf("Error: could not open file %s", fileNameCrp);
+            printf("Error: could not open file %s", nameCrp);
             return 1;
         }
 
         // reading line by line, max 256 characters
         char string[MAX];
 
-        while (fgets(string, MAX, ptr))
+        do
         {
-            printf("%s\n", string);
-
-            // close the file
-
             // DECRYPTION STARTS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             int hex_converter[MAX];
 
@@ -110,12 +98,11 @@ int main(int argC[], char argV[])
                     fprintf(append, "%s", '\t');
                 }
             }
-        }
+        } while (!feof(nameCrp));
         fclose(ptr);
-        break;
     }
-    default:
-        printf("This is invalid input.");
-        return 0;
+    else
+    {
+        printf("Unknown switch: %s\n", switchValue);
     }
 }
