@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 #define MAX 120
 
 int main(int argC, char *argV[])
@@ -8,11 +9,15 @@ int main(int argC, char *argV[])
     char *nametxt = "encrypt_this2.txt";
     char *nameCrp = "encrypt_this2.crp";
     char *switchValue = argV[1];
+    int count = 120;
+    char *endd;
 
     char printString[MAX] = "";
     char charats[MAX * 2] = "";
     FILE *ptr, *write, *append;
     int outChar;
+    char string[MAX];
+    long int hex_converter[MAX];
 
     printf("%s", switchValue);
     if (strcmp(switchValue, "-E") == 0)
@@ -61,44 +66,51 @@ int main(int argC, char *argV[])
         }
 
         // reading line by line, max 256 characters
-        char string[MAX];
 
         do
         {
             // DECRYPTION STARTS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            int hex_converter[MAX];
+            fgets(string, MAX, ptr);
+            printf("String Length: %d", strlen(string));
+            hex_converter[0] = 0;
+            charats[0] = string[0];
+            charats[1] = string[1];
+            printf("\nCharats: %s", charats);
+            hex_converter[0] = strtol(*charats, &endd, 3);
 
-            for (int i = 0; i < strlen(string); i + 2)
+            printf("Hex_Conv: %ld\n", hex_converter[0]);
+            if (endd != '\0')
             {
-                charats[0] = string[i];
-                charats[1] = string[i + 1];
-                printf("%s", charats);
-                hex_converter[i] = (int)charats;
-                printf("\nPosition %d: %d\n", i, *(string + i));
+                hex_converter[0] = strtol(charats, &endd, 3);
+            }
+            else
+            {
 
-                printf("%d", hex_converter[i]);
-                if (hex_converter[i] > 112)
+                if (hex_converter[0] > 112)
                 {
-                    hex_converter[i] = (hex_converter[i] + 32) - 144;
-                    fprintf(append, "%c", (char)hex_converter[i]);
+                    hex_converter[0] = (hex_converter[0] + 32) - 144;
+                    fprintf(append, "%c", (char)hex_converter[0]);
                 }
-                else if (hex_converter[i] == 128)
+                else if (hex_converter[0] == 128)
                 {
-                    hex_converter[i] = 32;
-                    fprintf(append, "%c", (char)hex_converter[i]);
+                    hex_converter[0] = 32;
+                    fprintf(append, "%c", (char)hex_converter[0]);
                 }
                 else
                 {
-                    hex_converter[i] = hex_converter[i] + 16;
-                    fprintf(append, "%c", (char)hex_converter[i]);
+                    hex_converter[0] = hex_converter[0] + 16;
+                    fprintf(append, "%c", (char)hex_converter[0]);
                 }
 
-                if (hex_converter[i] == 'T' && hex_converter[i + 1] == 'T')
+                if (hex_converter[0] == 'T' && hex_converter[1] == 'T')
                 { // this is why i set the tab input to 500... just sets it TT
                     fprintf(append, "%s", '\t');
                 }
             }
-        } while (!feof(nameCrp));
+            count--;
+            if (count < 100)
+                break;
+        } while (count > 0);
         fclose(ptr);
     }
     else
