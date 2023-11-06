@@ -2,63 +2,62 @@
 #include <string.h>
 #define MAX 120
 
-int main(void) {
+int main(void)
+{
 
-  char *filename = "test.txt";
-  FILE *fp = fopen(filename, "r");
+  char *filenamecrp[] = "test.crp";
+  char charats[MAX * 2] = "";
+  FILE *ptr = fopen("test.crp", "r"), *write = fopen("test.txt", "w"), *append = fopen("test.txt", "a");
 
-  if (fp == NULL)
+  if (ptr == NULL)
   {
-      printf("Error: could not open file %s", filename);
-      return 1;
+    printf("Error: could not open file %s", filenamecrp);
+    return 1;
   }
 
-  // reading line by line, max 256 bytes
+  // reading line by line, max 256 characters
   char string[MAX];
 
-  while (fgets(string, MAX, fp))
-      printf("%s", string);
+  while (fgets(string, MAX, ptr))
+  {
+    printf("%s\n", string);
 
-  // close the file
-  fclose(fp);
+    // close the file
 
-  //DECRYPTION STARTS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  int hex_converter[MAX];
+    // DECRYPTION STARTS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    int hex_converter[MAX];
 
-  for(int i = 0; i < strlen(string); i++){
-    printf("Position %d: %d\n", i, *(string+i));
-  }
+    for (int i = 0; i < strlen(string); i + 2)
+    {
+      charats[0] = string[i];
+      charats[1] = string[i + 1];
+      printf("%s", charats);
+      hex_converter[i] = (int)charats;
+      printf("\nPosition %d: %d\n", i, *(string + i));
 
-  for(int i = 0; i < strlen(string)-1; i++){
+      printf("%d", hex_converter[i]);
+      if (hex_converter[i] > 112)
+      {
+        hex_converter[i] = (hex_converter[i] + 32) - 144;
+        fprintf(append, "%c", (char)hex_converter[i]);
+      }
+      else if (hex_converter[i] == 128)
+      {
+        hex_converter[i] = 32;
+        fprintf(append, "%c", (char)hex_converter[i]);
+      }
+      else
+      {
+        hex_converter[i] = hex_converter[i] + 16;
+        fprintf(append, "%c", (char)hex_converter[i]);
+      }
 
-    hex_converter[i] = strcat(*(string+i),*(string+(i+1))); //stores each character as an integer
-
-    if(hex_converter[i] == 500){
-      hex_converter[i] = 9;
-    } 
-
-    else if(hex_converter[i] > 112){
-      hex_converter[i] = (hex_converter[i] + 32) - 144;
-    }
-
-    else if(hex_converter[i] == 128){
-      hex_converter[i] = 32; 
-    }
-
-    else{
-      hex_converter[i] = hex_converter[i] + 16;
-    }
-  }
-
-  for(int i = 0; i < strlen(string)-1; i++){
-
-    if(hex_converter[i] == 9){ //this is why i set the tab input to 500... just sets it TT
-      printf("\t");
-    }
-    else{
-      printf("%c",hex_converter[i]); //converts int to char
+      if (hex_converter[i] == 'T' && hex_converter[i + 1] == 'T')
+      { // this is why i set the tab input to 500... just sets it TT
+        fprintf(append, "%s", '\t');
+      }
     }
   }
-   
+  fclose(ptr);
   return 0;
 }
