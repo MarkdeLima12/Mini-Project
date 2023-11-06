@@ -3,15 +3,16 @@
 #include <unistd.h>
 #define MAX 120
 
-int main(char argC[], char name[])
+int main(int argC[], char argV[])
 {
-    const char fileNametxt[] = name;
-    const char fileNameCrp[] = name;
-    char switchCheck = argC[1];
+    char fileNametxt[] = argV[2];
+    char fileNameCrp[] = argV[2];
+    char switchCheck = argV[1];
     char printString[MAX] = "";
     char charats[MAX * 2] = "";
     FILE *ptr, *write, *append;
     int outChar;
+    printf("%s", argv[2]);
 
     strncat(fileNametxt, ".txt", 5);
     strncat(fileNameCrp, ".crp", 5);
