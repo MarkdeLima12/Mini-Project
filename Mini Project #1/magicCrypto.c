@@ -6,10 +6,10 @@
 
 int main(int argC, char *argV[])
 {
-    char *nametxt = "encrypt_this2.txt";
-    char *nameCrp = "encrypt_this2.crp";
+    char *nametxt = argV[2];
+    char *nameCrp = strcat(argV[2], ".crp");
     char *switchValue = argV[1];
-    int count = 120;
+    int count = MAX;
     char *endd;
 
     char printString[MAX] = "";
@@ -53,6 +53,9 @@ int main(int argC, char *argV[])
                 }
             }
             printf("%s\n", printString);
+            count--;
+            if (count < 100)
+                break;
         } while (!feof(ptr));
     }
     else if (strcmp(switchValue, "-D") == 0)
