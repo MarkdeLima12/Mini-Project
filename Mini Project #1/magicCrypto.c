@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
 #define MAX 120
 
 int main(int argC, char *argV[])
 {
-    char *nametxt = argV[2];
+    char *nametxt = strcat(argV[2], ".txt");
     char *nameCrp = strcat(argV[2], ".crp");
     char *switchValue = argV[1];
     int count = MAX;
