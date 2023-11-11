@@ -1,12 +1,15 @@
 #include <stdio.h>
 #define MAX 13
 
-int distance(float lat[], float longi[], float alt[], int people)
+int userDistance(float lat[], float longi[], float alt[], int people, struct user);
 {
-    int distance;
-    int user;
-    for (int k = 1; k <= people; k++)
+    /* data */
+} {
+    int distance;                     // used to store the distance between the user and the other person.
+    int user;                         // will be used to return the other person that is closest to the user.
+    for (int k = 1; k <= people; k++) // will cycle through the people.
     {
+        // will house the if statement and the equation.
     }
 
     return user;
@@ -30,7 +33,7 @@ double getOtherUserLocation(float *longitude[], float *latitude[], float *altitu
 
 int main()
 {
-    struct user_0
+    struct user_0 // this is the format of the structure I found online, feel free to update as needed.
     {
         float userlatitude;
         float userlongitude;
@@ -43,4 +46,8 @@ int main()
     scanf("%d", &numPeople);
 
     getOtherUserLocation(&longitude, &latitude, &altitude, numPeople);
+
+    userDistance(latitude, longitude, altitude, numPeople, user_0);
+
+    // there will be more print statements after this to help with the layout.
 }
