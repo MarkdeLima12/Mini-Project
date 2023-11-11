@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include <math.h>
-#define MAX 13
+#define MAX 100
 
-int userDistance(float lat[], float longi[], float alt[], int people, User userPosition)
+int userDistance(struct userPosition[MAX], int people)
 {
     float distance[MAX]; // used to store the distance between the user and the other person.
     int user;
     int latitudeDif, longitudeDif, altitudeDif; // will be used to return the other person that is closest to the user.
     for (int k = 1; k <= people; k++)           // will cycle through the people.
+                                                // This is supposed to take the values from a structure but I can't figure out how to do it...
+                                                // If you can figure it out, go for it
     {
-        latitudeDif = (userPosition.userlatitude - lat[k]) * (userPosition.userlatitude - lat[k]);
-        longitudeDif = (userPosition.userlatitude - lat[k]) * (userPosition.userlatitude - lat[k]);
+        latitudeDif = (userPosition.userlatitude[k] - userPosition.userlatitude[k]) * (userPosition.userlatitude - lat[k]);
+        longitudeDif = (userPosition.userlongitude - longi[k]) * (userPosition.userlatitude - lat[k]);
         altitudeDif = (userPosition.useraltitude - alt[k]) * (userPosition.useraltitude - alt[k]);
         // will house the if statement and the equation.
         distance[k] = sqrt(latitudeDif + longitudeDif + altitudeDif);
@@ -23,43 +25,51 @@ int userDistance(float lat[], float longi[], float alt[], int people, User userP
     return user;
 }
 
-typedef struct user_0 User;
-
-void passByValue(User user0);
-
-struct user_0 // this is the format of the structure I found online, feel free to update as needed.
+struct userStats // this is the format of the structure I found online, feel free to update as needed.
 {
+    char userName[MAX];
     float userlatitude;
     float userlongitude;
     float useraltitude;
 };
+struct userStats userStats[MAX];
 
-double getOtherUserLocation(float *longitude[], float *latitude[], float *altitude[], int people)
+struct userStats getOtherUserLocation(int people)
 {
-    for (int i = 1; i <= people; i++) // Starts at 1 so that when you print out the value of i,
-                                      // it prints starting at 1
+
+    struct userStats location;
+    FILE *fileRead = fopen("user_location.txt", "r"); // open the file for reading
+    if (fileRead == NULL)
     {
-        printf("Please enter the latitude of Person #%d: ", i);
-        scanf("%f", &latitude[i]);
-
-        printf("Please enter the longitude of Person #%d: ", i);
-        scanf("%f", &longitude[i]);
-
-        printf("Please enter the altitude of Person #%d: ", i);
-        scanf("%f", &altitude[i]);
+        printf("Error: cannot open file\n");
+        exit(1); // terminate the program with an error code
     }
+    // scan the file for the user ID and the location
+    int id;
+    double lat, lon, alt;
+    fscanf(fileRead, "%d\n%lf\n%lf\n%lf", &id, &lat, &lon, &alt);
+
+    fclose(fileRead); // close the file
+    // store the location in the global array
+    userStats[people] = location;
+    // return the location
+    return location;
 }
 
 int main()
 {
+    struct userStats userStats[MAX] = {};
     int numPeople;
+
     float latitude[MAX], longitude[MAX], altitude[MAX];
-    printf("How many other people are there: ");
-    scanf("%d", &numPeople);
 
-    getOtherUserLocation(&longitude, &latitude, &altitude, numPeople);
-
-    int closestUser = userDistance(latitude, longitude, altitude, numPeople, user_0);
+    for (int i = 0; i < numPeople; i++)
+    {
+        userStats userStats[i] = getOtherUserLocation(numPeople);
+    }
+    int closestUser = userDistance(userStats, numPeople);
 
     // there will be more print statements after this to help with the layout.
+
+    printf("The closest user to you is user %d with a position of %f, %f, %f.", closestUser, longitude[closestUser], latitude[closestUser], altitude[closestUser]);
 }
