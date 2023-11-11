@@ -1,13 +1,23 @@
 #include <stdio.h>
+#include <math.h>
 #define MAX 13
 
 int userDistance(float lat[], float longi[], float alt[], int people, User userPosition)
 {
-    int distance;                     // used to store the distance between the user and the other person.
-    int user;                         // will be used to return the other person that is closest to the user.
-    for (int k = 1; k <= people; k++) // will cycle through the people.
+    float distance[MAX]; // used to store the distance between the user and the other person.
+    int user;
+    int latitudeDif, longitudeDif, altitudeDif; // will be used to return the other person that is closest to the user.
+    for (int k = 1; k <= people; k++)           // will cycle through the people.
     {
+        latitudeDif = (userPosition.userlatitude - lat[k]) * (userPosition.userlatitude - lat[k]);
+        longitudeDif = (userPosition.userlatitude - lat[k]) * (userPosition.userlatitude - lat[k]);
+        altitudeDif = (userPosition.useraltitude - alt[k]) * (userPosition.useraltitude - alt[k]);
         // will house the if statement and the equation.
+        distance[k] = sqrt(latitudeDif + longitudeDif + altitudeDif);
+        if (distance[k] < distance[k - 1])
+        {
+            user = k;
+        }
     }
 
     return user;
