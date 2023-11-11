@@ -1,10 +1,8 @@
 #include <stdio.h>
 #define MAX 13
 
-int userDistance(float lat[], float longi[], float alt[], int people, struct user);
+int userDistance(float lat[], float longi[], float alt[], int people, User userPosition)
 {
-    /* data */
-} {
     int distance;                     // used to store the distance between the user and the other person.
     int user;                         // will be used to return the other person that is closest to the user.
     for (int k = 1; k <= people; k++) // will cycle through the people.
@@ -14,6 +12,17 @@ int userDistance(float lat[], float longi[], float alt[], int people, struct use
 
     return user;
 }
+
+typedef struct user_0 User;
+
+void passByValue(User user0);
+
+struct user_0 // this is the format of the structure I found online, feel free to update as needed.
+{
+    float userlatitude;
+    float userlongitude;
+    float useraltitude;
+};
 
 double getOtherUserLocation(float *longitude[], float *latitude[], float *altitude[], int people)
 {
@@ -33,13 +42,6 @@ double getOtherUserLocation(float *longitude[], float *latitude[], float *altitu
 
 int main()
 {
-    struct user_0 // this is the format of the structure I found online, feel free to update as needed.
-    {
-        float userlatitude;
-        float userlongitude;
-        float useraltitude;
-    };
-
     int numPeople;
     float latitude[MAX], longitude[MAX], altitude[MAX];
     printf("How many other people are there: ");
@@ -47,7 +49,7 @@ int main()
 
     getOtherUserLocation(&longitude, &latitude, &altitude, numPeople);
 
-    userDistance(latitude, longitude, altitude, numPeople, user_0);
+    int closestUser = userDistance(latitude, longitude, altitude, numPeople, user_0);
 
     // there will be more print statements after this to help with the layout.
 }
