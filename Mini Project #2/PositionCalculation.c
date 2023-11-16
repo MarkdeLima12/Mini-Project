@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define MAX 100 // Max numer of users the programme can have
-#define NAME "other_users1.txt"
+#define FILE_NAME "other_users2.txt"
 
 typedef struct userStats // this is the format of the structure I found online, feel free to update as needed.
 {
@@ -17,19 +17,19 @@ USERSTATS userStats1[MAX];
 
 int userDistance(USERSTATS userPosition[MAX], int people)
 {
-    float distance[MAX]; // used to store the distance between the user and the other person.
+    double distance[MAX]; // used to store the distance between the user and the other person.
     int user;
-    distance[user] = 700000000;
-    float latitudeDif, longitudeDif, altitudeDif; // will be used to return the other person that is closest to the user.
-    for (int k = 1; k <= people; k++)             // will cycle through the people.
+    distance[user] = 9999999999999;
+    double latitudeDif, longitudeDif, altitudeDif; // will be used to return the other person that is closest to the user.
+    for (int k = 1; k <= people; k++)              // will cycle through the people.
     {
-        printf("hello");
         latitudeDif = (userPosition[0].userlatitude - userPosition[k].userlatitude) * (userPosition[0].userlatitude - userPosition[k].userlatitude);
         longitudeDif = (userPosition[0].userlongitude - userPosition[k].userlongitude) * (userPosition[0].userlongitude - userPosition[k].userlatitude);
         altitudeDif = (userPosition[0].useraltitude - userPosition[k].useraltitude) * (userPosition[0].useraltitude - userPosition[k].userlatitude);
         // will house the if statement and the equation.
-        distance[k] = sqrt(latitudeDif + longitudeDif + altitudeDif);
-        printf("This is the distance: %lf\n", 12);
+        distance[k] = sqrt((latitudeDif + longitudeDif + altitudeDif));
+
+        // printf("This is the distance: %lf\n", distance);
         if (distance[k] < distance[user])
         {
             user = k;
@@ -41,8 +41,8 @@ int userDistance(USERSTATS userPosition[MAX], int people)
 
 USERSTATS getOtherUserLocation(USERSTATS *userStats1, int people)
 {
-    USERSTATS location;
-    FILE *fileRead = fopen(NAME, "r"); // open the file for reading
+    USERSTATS *location;
+    FILE *fileRead = fopen(FILE_NAME, "r"); // open the file for reading
     if (fileRead == NULL)
     {
         printf("Error: cannot open file\n");
@@ -56,41 +56,40 @@ USERSTATS getOtherUserLocation(USERSTATS *userStats1, int people)
     {
         fscanf(fileRead, "%lf\n%lf\n%lf\n%lf\n%s", &lat, &lon, &alt, &time, &name);
 
-        fclose(fileRead); // close the file
         // store the location in the global array
         userStats1[m].useraltitude = alt;
         userStats1[m].userlatitude = lat;
         userStats1[m].userlongitude = lon;
         userStats1[m].userTime = time;
-        userStats1[people].userName[m] = name[m];
-        printf("%lf\n", alt);
+        for (int t = 0; t < strlen(name); t++)
+            userStats1[m].userName[t] = name[t];
     }
 }
 
 int main()
 {
-    FILE *fileRead = fopen(NAME, "r"); // open the file for reading
-    USERSTATS userStats1[MAX] = {};
+    FILE *fileRead = fopen(FILE_NAME, "r"); // open the file for reading
 
     userStats1[0].useraltitude = 100.00;
     userStats1[0].userlatitude = 100.00;
     userStats1[0].userlongitude = 100.00;
-    // userStats1[0].userName = "Me";
+    userStats1[0].userTime = 100.00;
 
-    int numPeople;
-    printf("Please enter the number of users: ");
-    scanf("%d", &numPeople);
-    // fread(&numPeople, 2, 1, fileRead);
+    int numPeople = 10;
+    char name[MAX];
 
-    printf("Hello: %d\n", numPeople);
-
-    float latitude[MAX], longitude[MAX], altitude[MAX];
-
-    printf("Hello\n");
     getOtherUserLocation(&userStats1, numPeople);
     int closestUser = userDistance(&userStats1, numPeople);
 
     // there will be a print statement after this to help with the layout.
 
-    printf("The closest user to you is user %d with a position of %f, %f, %f.", closestUser, longitude[closestUser], latitude[closestUser], altitude[closestUser]);
+    printf("Reference user: \nUser Me: \nLatitude: \t%.2lf\nLongitude: \t%.2lf\nAltitude: \t%.2lf\n\n", userStats1[0].userlatitude, userStats1[0].userlongitude, userStats1[0].useraltitude);
+
+    printf("The closest user to you is user %d, ", closestUser);
+    for (int j = 0; j <= strlen(userStats1[closestUser].userName); j++)
+    {
+        name[j] = userStats1[closestUser].userName[j];
+    }
+    printf("%s", name);
+    printf(" , with a position of %.2lf, %.2lf, %.2lf.", userStats1[closestUser].userlatitude, userStats1[closestUser].userlongitude, userStats1[closestUser].useraltitude);
 }
