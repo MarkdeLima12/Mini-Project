@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define MAX 100 // Max numer of users the programme can have
-#define FILE_NAME "other_users2.txt"
+#define FILE_NAME "other_users1.txt"
 
 typedef struct userStats // this is the format of the structure I found online, feel free to update as needed.
 {
@@ -18,7 +18,7 @@ USERSTATS userStats1[MAX];
 int userDistance(USERSTATS userPosition[MAX], int people)
 {
     double distance[MAX]; // used to store the distance between the user and the other person.
-    int user;
+    int user = 0;
     distance[user] = 9999999999999;
     double latitudeDif, longitudeDif, altitudeDif; // will be used to return the other person that is closest to the user.
     for (int k = 1; k <= people; k++)              // will cycle through the people.
@@ -70,10 +70,10 @@ int main()
 {
     FILE *fileRead = fopen(FILE_NAME, "r"); // open the file for reading
 
-    userStats1[0].useraltitude = 100.00;
-    userStats1[0].userlatitude = 100.00;
-    userStats1[0].userlongitude = 100.00;
-    userStats1[0].userTime = 100.00;
+    userStats1[0].useraltitude = 5000.00;
+    userStats1[0].userlatitude = 5000.00;
+    userStats1[0].userlongitude = 5000.00;
+    userStats1[0].userTime = 5000.00;
 
     int numPeople = 10;
     char name[MAX];
