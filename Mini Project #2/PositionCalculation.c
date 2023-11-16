@@ -3,16 +3,25 @@
 #include <stdlib.h>
 #define MAX 100 // Max numer of users the programme can have
 
-int userDistance(struct userStats userPosition[MAX], int people)
+typedef struct userStats // this is the format of the structure I found online, feel free to update as needed.
+{
+    char userName[MAX];
+    float userlatitude;
+    float userlongitude;
+    float useraltitude;
+} USERSTATS;
+USERSTATS userStats1[MAX];
+
+int userDistance(USERSTATS userPosition[MAX], int people)
 {
     float distance[MAX]; // used to store the distance between the user and the other person.
     int user;
     float latitudeDif, longitudeDif, altitudeDif; // will be used to return the other person that is closest to the user.
     for (int k = 1; k <= people; k++)             // will cycle through the people.
     {
-        latitudeDif = (userPosition.userlatitude[0] - userPosition.userlatitude[k]) * (userPosition.userlatitude[0] - userPosition.userlatitude[k]);
-        longitudeDif = (userPosition.userlongitude[0] - userPosition.userlongitude[k]) * (userPosition.userlongitude[0] - userPosition.userlatitude[k]);
-        altitudeDif = (userPosition.useraltitude[0] - userPosition.useraltitude[k]) * (userPosition.useraltitude[0] - userPosition.userlatitude[k]);
+        latitudeDif = (userPosition[0].userlatitude - userPosition[k].userlatitude) * (userPosition[k].userlatitude - userPosition[k].userlatitude);
+        longitudeDif = (userPosition[0].userlongitude - userPosition[k].userlongitude) * (userPosition[k].userlongitude - userPosition[k].userlatitude);
+        altitudeDif = (userPosition[0].useraltitude - userPosition[k].useraltitude) * (userPosition[k].useraltitude - userPosition[k].userlatitude);
         // will house the if statement and the equation.
         distance[k] = sqrt(latitudeDif + longitudeDif + altitudeDif);
         if (distance[k] < distance[user])
@@ -24,19 +33,10 @@ int userDistance(struct userStats userPosition[MAX], int people)
     return user;
 }
 
-struct userStats // this is the format of the structure I found online, feel free to update as needed.
-{
-    char userName[MAX];
-    float userlatitude;
-    float userlongitude;
-    float useraltitude;
-};
-struct userStats userStats1[MAX];
-
-struct userStats getOtherUserLocation(int people)
+USERSTATS getOtherUserLocation(int people)
 {
 
-    struct userStats location;
+    USERSTATS location;
     FILE *fileRead = fopen("other_users1.txt", "r"); // open the file for reading
     if (fileRead == NULL)
     {
@@ -57,7 +57,7 @@ struct userStats getOtherUserLocation(int people)
 
 int main()
 {
-    struct userStats userStats1[MAX] = {};
+    USERSTATS userStats1[MAX] = {};
     int numPeople;
 
     float latitude[MAX], longitude[MAX], altitude[MAX];
